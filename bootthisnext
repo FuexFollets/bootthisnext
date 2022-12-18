@@ -1,0 +1,14 @@
+#!/bin/bash
+
+current=$(efibootmgr | grep "BootCurrent" | cut -c 14-)
+
+[ $USER != "root" ] && echo "Aborting. Program requires super user" && exit
+
+echo "Current boot detected as $current"
+echo -n "Would you like to boot this next? [Y/n] "
+
+read -r input
+
+[ $input = "Y" ] && efibootmgr --bootnext $current && echo "Next boot change successful. Next boot is set to $current" && exit
+
+echo "Next boot not changed. Exiting"
